@@ -7,6 +7,7 @@ package uuid
 import (
 	"bytes"
 	"crypto/rand"
+	"errors"
 	"fmt"
 	"io"
 	"strings"
@@ -73,6 +74,26 @@ func Parse(s string) UUID {
 // Equal returns true if uuid1 and uuid2 are equal.
 func Equal(uuid1, uuid2 UUID) bool {
 	return bytes.Equal(uuid1, uuid2)
+}
+
+func (u *UUID) Scan(src interface{}) error {
+	bytes, ok := src.([]byte)
+	if !ok {
+		return errors.New("invalid UUID format")
+	}
+
+	if len(bytes) != 36 {
+		return errors.New("invalid UUID format")
+	}
+
+	uu := Parse(string(bytes))
+	if uu == nil {
+		return errors.New("invalid UUID format")
+	}
+
+	*u = uu
+	fmt.Println(u, uu)
+	return nil
 }
 
 // String returns the string form of uuid, xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
