@@ -92,7 +92,6 @@ func (u *UUID) Scan(src interface{}) error {
 	}
 
 	*u = uu
-	fmt.Println(u, uu)
 	return nil
 }
 
